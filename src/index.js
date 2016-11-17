@@ -12,6 +12,7 @@ class Plugin {
     this.removeFileSync = fse.unlinkSync;
 
     this.hooks = {
+      'offline:start:init': this.writeEnvironmentFile.bind(this),
       'before:deploy:function:deploy': this.writeEnvironmentFile.bind(this),
       'after:deploy:function:deploy': this.deleteEnvironmentFile.bind(this),
       'before:deploy:createDeploymentArtifacts': this.writeEnvironmentFile.bind(this),
@@ -34,7 +35,7 @@ class Plugin {
   writeEnvironmentFile() {
     const config = this.getConfig();
 
-    if(config && config.fileName) {
+    if (config && config.fileName) {
       const envFilePath = this.getEnvFilePath(config.fileName);
       const packagedEnvPath = this.getPackagedEnvFilePath();
       this.copyFileSync(envFilePath, packagedEnvPath);
@@ -49,7 +50,7 @@ class Plugin {
     const envPath = this.getPackagedEnvFilePath();
     try {
       this.removeFileSync(envPath);
-    } catch(err) { // eslint-disable-line no-empty
+    } catch (err) { // eslint-disable-line no-empty
     }
   }
 }
